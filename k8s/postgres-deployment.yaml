@@ -25,8 +25,18 @@ spec:
               mountPath: /var/lib/postgresql/data
               subPath: postgres
           env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: gamedb-secrets
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: gamedb-secrets
+                  key: POSTGRES_USER
             - name: POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: pgpassword
-                  key: PGPASSWORD
+                  name: gamedb-secrets
+                  key: POSTGRES_PASSWORD

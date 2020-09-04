@@ -1,10 +1,10 @@
-apiVersion: app/v1
+apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: django-deployment
 spec:
   selector:
-    matchLables:
+    matchLabels:
       component: web
   template:
     metadata:
@@ -13,5 +13,36 @@ spec:
     spec:
       containers:
         - name: django
-          image: shaggydog/gamedb-web
-          ports: 8000
+          image: shaggydog/gamedb:latest
+          imagePullPolicy: Always
+          command: ["./manage.py", "runserver", "0.0.0.0:8000"]
+          ports:
+            - containerPort: 8000
+          env:
+            - name: POSTGRES_DB
+              valueFrom:
+                secretKeyRef:
+                  name: gamedb-secrets
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                secretKeyRef:
+                  name: gamedb-secrets
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: gamedb-secrets
+                  key: POSTGRES_PASSWORD
+            - name: POSTGRES_HOST
+              value: postgres-service
+            - name: POSTGRES_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: gamedb-secrets
+                  key: POSTGRES_PORT
+            - name: SECRET_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: gamedb-secrets
+                  key: SECRET_KEY

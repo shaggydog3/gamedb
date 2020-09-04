@@ -3,3 +3,7 @@
 
 # create the project:
 docker-compose run web django-admin startproject gamedb .
+
+Kubernetes commands:
+kubectl apply -f k8s
+kubectl describe pod django-development
